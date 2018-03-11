@@ -1,0 +1,38 @@
+sketchConfig:
+  rows: 5
+  cols: 1000
+  prime: 7283
+detectionParameters:
+  heavyHitterThreshold: 700
+  heavyChangerThreshold: 500
+  sketchRotationInterval: 2
+  maxHistoryQueueLength: 1000
+
+logging:
+  level: INFO
+  loggers:
+    #change this one to see the events when they are POSTed
+    com.lpineda.dsketch: INFO
+    com.lpineda.dsketch.resources.EventResouce: WARN
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: event-receiver.log
+      archivedLogFilenamePattern: event-receiver-%d.log.gz
+      archivedFileCount: 5
+server:
+  requestLog:
+    appenders: []
+
+
+#docker run --rm --name redis -p 6379:6379 redis
+database:
+  # The redis server's address; required.
+  address: "redis"
+  cache_size: 1000
+
+broker:
+  address: "tcp://mosquitto:1883"
