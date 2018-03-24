@@ -2,6 +2,7 @@ import time
 import logging
 import paho.mqtt.client as mqtt
 import random
+import argparse
 
 class MqttClient(object):
     def __init__(self, server_address):
@@ -67,15 +68,34 @@ for k, v in messages.iteritems():
 
 random.shuffle(messages_universe)
 
+parser = argparse.ArgumentParser(description='Generate events and publish them to mqtt topic.')
+parser.add_argument('ip', metavar='N', type=str, help='IP Address')
+parser.add_argument('--n_events', metavar='N', type=str,  help='How many events will be generated')
 
-n_events = 1000000
-client = MqttClient('127.0.0.1')
+args = parser.parse_args()
+ip = args.ip
+n_events = args.n_events
 
-for _ in range(n_events):
-    n = random.randint(0, len(messages_universe)-1)
-    try:
-        client.publish(messages_universe[n])
-    except Exception as ex:
-        print "ERROR"
-        print type(ex)
+client = MqttClient(ip)
+
+if not n_events:
+    print("Publishing infinite events.")
+    while True:
+        n = random.randint(0, len(messages_universe)-1)
+        try:
+            client.publish(messages_universe[n])
+        except Exception as ex:
+            print "ERROR"
+            print type(ex)
+else:
+    n_events = int(n_events)
+    print("Publishing {} events.".format(n_events))
+
+    for _ in range(n_events):
+        n = random.randint(0, len(messages_universe)-1)
+        try:
+            client.publish(messages_universe[n])
+        except Exception as ex:
+            print "ERROR"
+            print type(ex)
 
