@@ -1,7 +1,7 @@
 version: '3'
 services:
   sketch-ws:
-    image: lpineda/sketch-ws:v3
+    image: lpineda/sketch-ws:v4
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -21,7 +21,7 @@ services:
       - "1883:1883"
       - "9001:9001"
   sketch-ui:
-    image: lpineda/sketch-ui:v3
+    image: lpineda/sketch-ui:v4
     ports:
       - "80:80"
     links:
