@@ -22,7 +22,9 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
-
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /tmp:/mosquitto/data
   sketch-ui:
     image: lpineda/sketch-ui:v4
     ports:
@@ -56,11 +58,14 @@ services:
       - "3000:3000"
     volumes:
       - ./provisioning:/etc/grafana/provisioning
+      - ./dashboards:/var/lib/grafana/dashboards
 
   cadvisor-exporter:
     image: google/cadvisor
     ports:
       - "9200:8080"
+    command:
+      - '--housekeeping_interval=5s'
     volumes:
       - "/:/rootfs:ro"
       - "/var/run:/var/run:rw"

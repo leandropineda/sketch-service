@@ -41,6 +41,7 @@ class MqttClient(object):
             mqtt_msg_info = self.client.publish(self.topic, event)
             if not mqtt_msg_info.is_published():
                 self.logger.error("Error publishing message")
+                self.logger.error(mqtt_msg_info)
 
         except Exception as ex:
             self.logger.error(ex)
