@@ -65,7 +65,10 @@ services:
     ports:
       - "9200:8080"
     command:
-      - '--housekeeping_interval=5s'
+      - "--housekeeping_interval=5s"
+      - "--allow_dynamic_housekeeping=false"
+      - "--global_housekeeping_interval=1m0s"
+      - "--disable_metrics=tcp,udp,disk,network"
     volumes:
       - "/:/rootfs:ro"
       - "/var/run:/var/run:rw"
