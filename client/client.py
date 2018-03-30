@@ -5,7 +5,7 @@ import logging
 import paho.mqtt.client as mqtt
 import random
 import argparse
-from multiprocessing.dummy import Pool as ThreadPool 
+import threading
 
 def configure_logger(logger):
         logger.setLevel(logging.DEBUG)
@@ -45,6 +45,7 @@ class MqttErrors(object):
     def get(self, error_value):
         return self.error_map.get(error_value)
 
+
 class MqttClient(object):
     def __init__(self, server_address):
 
@@ -66,16 +67,14 @@ class MqttClient(object):
         # start
         self.connect()
 
-
     def connect(self):
         self.logger.debug("Connecting to " + self.server_address)
-        client_conn = self.client.connect_async(self.server_address, keepalive=5)
+        client_conn = self.client.connect(self.server_address, keepalive=5)
         if client_conn:
             self.logger.error("Couldn't connect")
             exit(1)
         self.logger.info("Connected")
         self.client.loop_start()
-
 
     def publish(self, event):
         while not self._is_connected:
@@ -99,6 +98,7 @@ class MqttClient(object):
     def on_disconnect(self, client, userdata, rc):
         self.logger.warn("Connection lost. Result code {}: {}".format(rc, self.error_description.get(rc)))
         self._is_connected = False
+
 
 class MqttPublisher(object):
     def __init__(self, server_address):
@@ -127,6 +127,7 @@ class MqttPublisher(object):
         random.shuffle(self.messages_universe)
         self.len_messages_universe = len(self.messages_universe)
 
+        self.logger.info("Building Mqtt client")
         self.client = MqttClient(self.server_address)
 
     def publish_random_event(self):
@@ -146,6 +147,7 @@ class MqttPublisher(object):
             for e in range(n_events):
                 self.publish_random_event()
 
+
 class MqttPublisherThreading(object):
     def __init__(self, server_address, n_threads, n_events):
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -154,16 +156,22 @@ class MqttPublisherThreading(object):
         self.server_address = server_address
         self.n_threads = int(n_threads)
         self.n_events = n_events
-        self.pool = ThreadPool(self.n_threads)
         self.logger.info("Threads {}. Events {}.".format(n_threads, n_events))
 
     def publish(self):
-        def build_worker(n_events, obj = MqttPublisher(self.server_address)):
+        def build_worker(n_events):
+            obj = MqttPublisher(self.server_address)
             self.logger.info("Building worker")
             obj.publish(n_events)
-        results = self.pool.map(build_worker, [self.n_events for _ in range(self.n_threads)])
 
+        for t in range(self.n_threads):
+            self.logger.info("Spawning thread {}/{}".format(t+1, n_threads))
+            t = threading.Thread(target=build_worker, args=(self.n_events,))
+            t.daemon = True
+            t.start()
 
+        while True:
+            time.sleep(1)
 
 
 parser = argparse.ArgumentParser(description='Generate events and publish them to mqtt topic.')
