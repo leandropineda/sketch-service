@@ -13,3 +13,14 @@ scrape_configs:
     scrape_interval: 1s
     static_configs:
       - targets: ['cadvisor-exporter:8080']
+  - job_name: 'sketch-ws-exporter'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['sketch-ws:8080']
+  - job_name: 'dropwizard-exporter'
+    scrape_interval: 1s
+    metrics_path: '/dropwizardMetrics'
+    static_configs:
+      - targets: ['sketch-ws:8080']
+
+
