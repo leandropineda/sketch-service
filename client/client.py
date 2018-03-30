@@ -5,7 +5,7 @@ import logging
 import paho.mqtt.client as mqtt
 import random
 import argparse
-import threading
+from multiprocessing import Process
 
 def configure_logger(logger):
         logger.setLevel(logging.DEBUG)
@@ -146,29 +146,30 @@ class MqttPublisher(object):
             self.logger.info("Publishing {} events.".format(n_events))
             for e in range(n_events):
                 self.publish_random_event()
+            self.logger.info("Done publishing events")
 
 
-class MqttPublisherThreading(object):
-    def __init__(self, server_address, n_threads, n_events):
+class MqttPublisherProcessing(object):
+    def __init__(self, server_address, n_processes, n_events):
         self.logger = logging.getLogger(self.__class__.__name__)
         configure_logger(self.logger)
 
         self.server_address = server_address
-        self.n_threads = int(n_threads)
+        self.n_processes = int(n_processes)
         self.n_events = n_events
-        self.logger.info("Threads {}. Events {}.".format(n_threads, n_events))
+        self.logger.info("Threads {}. Events {}.".format(n_processes, n_events))
 
     def publish(self):
-        def build_worker(n_events):
+        def build_worker(_n_events):
             obj = MqttPublisher(self.server_address)
             self.logger.info("Building worker")
-            obj.publish(n_events)
+            obj.publish(_n_events)
 
-        for t in range(self.n_threads):
-            self.logger.info("Spawning thread {}/{}".format(t+1, n_threads))
-            t = threading.Thread(target=build_worker, args=(self.n_events,))
-            t.daemon = True
-            t.start()
+        for t in range(self.n_processes):
+            self.logger.info("Spawning process {}/{}".format(t+1, n_processes))
+            p = Process(target=build_worker, args=(self.n_events,))
+            p.daemon = True
+            p.start()
 
         while True:
             time.sleep(1)
@@ -177,13 +178,13 @@ class MqttPublisherThreading(object):
 parser = argparse.ArgumentParser(description='Generate events and publish them to mqtt topic.')
 parser.add_argument('server_address', metavar='N', type=str, help='IP Address')
 parser.add_argument('--n_events', metavar='N', type=str,  help='How many events will be generated')
-parser.add_argument('--n_threads', metavar='N', type=str,  help='How many threads will be used')
+parser.add_argument('--n_processes', metavar='N', type=str,  help='How many processes will be used')
 
 args = parser.parse_args()
 server_address = args.server_address
 n_events = 0 if args.n_events is None else int(args.n_events)
-n_threads = 1 if args.n_threads is None else int(args.n_threads)
+n_processes = 1 if args.n_processes is None else int(args.n_processes)
 
-mqtt_publisher = MqttPublisherThreading(server_address, n_threads, n_events)
+mqtt_publisher = MqttPublisherProcessing(server_address, n_processes, n_events)
 mqtt_publisher.publish()
 
