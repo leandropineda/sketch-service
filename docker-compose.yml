@@ -1,7 +1,7 @@
 version: '3'
 services:
   sketch-ws:
-    image: lpineda/sketch-ws:v4
+    image: lpineda/sketch-ws:latest
     ports:
       - "8080:8080"
       - "8081:8081"
