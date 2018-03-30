@@ -324,6 +324,7 @@
       "steppedLine": false,
       "targets": [
         {
+          "$$hashKey": "object:1860",
           "expr": "jvm_memory_heap_used",
           "format": "time_series",
           "intervalFactor": 1,
@@ -331,13 +332,7 @@
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_heap_max",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Heap Max",
-          "refId": "B"
-        },
-        {
+          "$$hashKey": "object:1862",
           "expr": "jvm_memory_non_heap_used",
           "format": "time_series",
           "intervalFactor": 1,
@@ -349,6 +344,200 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "JVM memory",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 10,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:527",
+          "expr": "broker_clients_connected",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Connected clients",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:608",
+          "expr": "broker_clients_disconnected",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Disconnected clients",
+          "refId": "C"
+        },
+        {
+          "$$hashKey": "object:718",
+          "expr": "broker_clients_expired",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Expired clients",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Broker clients",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 12,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:925",
+          "expr": "broker_load_messages_received_1min",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Received messages 1m",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:1259",
+          "expr": "broker_load_messages_received_5min",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Received messages 5m",
+          "refId": "B"
+        },
+        {
+          "$$hashKey": "object:1032",
+          "expr": "broker_load_messages_received_15min",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Received messages 15m",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Broker received messages",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -419,7 +608,7 @@
     ]
   },
   "timezone": "",
-  "title": "Sketch-ws Dashboard",
+  "title": "Sketch-ws Dashboard 2",
   "uid": "YMiFTCzik",
   "version": 2
 }
