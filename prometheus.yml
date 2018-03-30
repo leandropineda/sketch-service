@@ -22,5 +22,8 @@ scrape_configs:
     metrics_path: '/dropwizardMetrics'
     static_configs:
       - targets: ['sketch-ws:8080']
-
+  - job_name: 'mosquitto-exporter'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['mosquitto-exporter:9234']
 

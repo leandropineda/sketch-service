@@ -25,6 +25,7 @@ services:
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - /tmp:/mosquitto/data
+
   sketch-ui:
     image: lpineda/sketch-ui:v4
     ports:
@@ -69,8 +70,16 @@ services:
       - "--allow_dynamic_housekeeping=false"
       - "--global_housekeeping_interval=1m0s"
     volumes:
-      - "/:/rootfs:ro"
-      - "/var/run:/var/run:rw"
-      - "/sys:/sys:ro"
-      - "/var/lib/docker/:/var/lib/docker:ro"
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
 
+  mosquitto-exporter:
+    image: sapcc/mosquitto-exporter:0.2.0
+    ports:
+      - "9234:9234"
+    environment:
+      - BROKER_ENDPOINT=tcp://mosquitto:1883
+    depends_on:
+      - mosquitto
